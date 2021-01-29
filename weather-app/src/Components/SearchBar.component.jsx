@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { Suspense, DelayedRender}  from 'react';
+import './SearchBar.styles.css'
+import ApexChart from './ApexChart'
 
 class SearchBar extends React.Component{
     constructor(){
         super();
         this.state = {
             location: "",
+            tempList: [],
             weather: {
                 city: {
                     name: ""
@@ -13,13 +16,17 @@ class SearchBar extends React.Component{
                     0:
                     {
                         main: {
-                            temp: 0
+                            temp: 0,
+                            humidity: 0,
                         },
                         weather: {
                             0: {
                                 description: "",
                                 icon: ""
                             }
+                        },
+                        wind: {
+                            speed: 0
                         }
                     }
                 }
@@ -42,6 +49,13 @@ class SearchBar extends React.Component{
             this.setState({weather: data});
             console.log(data)
             console.log(this.state.weather.city.name)
+            let TempValues = [];
+            for (let i=0; i<(this.state.weather.list).length; i++){
+                TempValues.push(this.state.weather.list[i].main.temp);
+            }
+            console.log(TempValues)
+            this.setState({tempList: TempValues}, this.forceUpdate)
+            console.log(this.state.tempList)
         })
         .catch( (error) => {
             // if the server returns any errors
@@ -56,12 +70,26 @@ class SearchBar extends React.Component{
                     <button onClick={this.GetData}>search</button>
                     <button>use current location</button>
                 </div>
+                <div id='WeatherDiv'>
                 <div id='WeatherInfoLeft'>
                     <h1>{this.state.weather.city.name ? this.state.weather.city.name : this.state.location}</h1> 
                     <h2>{this.state.weather.list[0].main.temp}&deg; C</h2>
                     <h2>{this.state.weather.list[0].weather[0].description}</h2>
                     <img src={'http://openweathermap.org/img/wn/'+ this.state.weather.list[0].weather[0].icon +'@2x.png'} alt=""/>
+                    <h4>Humidity</h4>
+                    <h2>{this.state.weather.list[0].main.humidity}%</h2>
+                    <h4>Wind Speed</h4>
+                    <h2>{this.state.weather.list[0].wind.speed} sm/s</h2>
                 </div>
+                <div id='WeatherInfoRight'>
+                    <div id='WeatherChart'>
+                        <ApexChart info={this.state.TempValues}/>
+                        
+                    </div>
+                    <div id='WeatherForecast'></div>
+                </div>
+                </div>
+                
             </div>   
         );
     }

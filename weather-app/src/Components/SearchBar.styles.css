@@ -1,0 +1,13 @@
+#WeatherInfoLeft{
+    width: 50vw;
+}
+#WeatherDiv{
+    display: flex;
+    flex-direction: row;
+}
+#WeatherInfoRight{
+    width: 50vw;
+}
+#WeatherChart .App{
+    display: flex;
+}
