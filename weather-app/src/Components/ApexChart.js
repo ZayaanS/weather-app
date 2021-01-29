@@ -27,7 +27,7 @@ class ApexChart extends Component {
   }
 
   render() {
-      if (this.props.info){
+      
         return (
             <div className="app">
               <div className="row">
@@ -42,10 +42,6 @@ class ApexChart extends Component {
               </div>
             </div>
           );
-      }
-      else{
-          return <div></div>
-      }
     
   }
 }
