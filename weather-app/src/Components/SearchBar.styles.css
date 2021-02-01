@@ -1,3 +1,8 @@
+body{
+    width: 100vw;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 #WeatherInfoLeft{
     display: flex;
     flex-direction: column;
@@ -8,9 +13,10 @@
 }
 #WeatherDiv{
     display: flex;
-    flex-direction: row;
-    width: 90vw;
-    margin-left: 5vw;
+    flex-direction: column;
+    width: 78vw;
+    margin-left: 11vw;
+    display: none;
 }
 #WeatherInfoRight{
     display: none;
@@ -23,7 +29,7 @@
     display: none !important;
 }
 #SearchBar{
-    margin: 30px 0 10px 0;
+    margin: 40px 0 60px 0;
     height: 40px;
     display: flex;
     flex-direction: row;
@@ -51,7 +57,7 @@ button, button:active, button:hover, button:focus{
     color: #ffffff;
     font-weight: 500;
 }
-#WeatherInfoLeft img{
+img{
     height: 100px;
     width: 100px;
     padding: 0;
@@ -65,4 +71,10 @@ button, button:active, button:hover, button:focus{
 }
 input:-internal-autofill-selected {
     background-color: #ffffff !important;
+}
+
+@media (max-width: 768px){
+    #WeatherInfoLeft{
+        text-align: center;
+    }
 }

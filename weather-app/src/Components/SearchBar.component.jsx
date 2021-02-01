@@ -108,8 +108,7 @@ class SearchBar extends React.Component{
                     }
                   }
             });
-            document.getElementById("WeatherInfoRight").style.display = "block";
-            document.getElementById("WeatherInfoLeft").style.display = "flex";
+            document.getElementById("WeatherDiv").style.display = "flex";
 
         })
         .catch( (error) => {
@@ -127,8 +126,7 @@ class SearchBar extends React.Component{
                 </div>
                 <div id='WeatherDiv'>
                     <div className='row'>
-                        <div className='col-md-12 col-lg-4'>
-                            <div id='WeatherInfoLeft'>
+                        <div className='col-md-12 col-lg-3'>
                                 <h1>{this.state.weather.city.name ? this.state.weather.city.name : this.state.location}</h1> 
                                 <h2>{this.state.weather.list[0].main.temp}&deg; C</h2>
                                 <h2>{this.state.weather.list[0].weather[0].description}</h2>
@@ -137,28 +135,21 @@ class SearchBar extends React.Component{
                                 <h2>{this.state.weather.list[0].main.humidity}%</h2>
                                 <h4>Wind Speed</h4>
                                 <h2>{this.state.weather.list[0].wind.speed} sm/s</h2>
+                        </div>
+                        <div className='col-md-12 col-lg-9'>
+                        <div id='WeatherChart'>
+                            <Chart
+                            options={this.state.options}
+                            series={this.state.series}
+                            type="area"
+                            />
                             </div>
                         </div>
-                        <div className='col-md-12 col-lg-8'>
-                            <div id='WeatherInfoRight'>
-                                <div id='WeatherChart'>
-                                    <div>
-                                        <div className="row">
-                                            <div className="mixed-chart">
-                                                <Chart
-                                                 options={this.state.options}
-                                                series={this.state.series}
-                                                type="area"
-                                                width="900"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id='WeatherForecast'></div>
-                                 </div>
-                            </div>
-                        </div>
+                    </div>
+
+                                
+                        
+                                
                 </div>
                 
             </div>   
