@@ -1,13 +1,18 @@
 #WeatherInfoLeft{
-    width: 50vw;
+    width: 40vw;
 }
 #WeatherDiv{
     display: flex;
     flex-direction: row;
 }
 #WeatherInfoRight{
-    width: 50vw;
+    width: 60vw;
+    border: solid 2px red;
 }
 #WeatherChart .App{
     display: flex;
+}
+
+.apexcharts-toolbar, .apexcharts-yaxis, .apexcharts-xaxis, .apexcharts-grid{
+    display: none !important;
 }

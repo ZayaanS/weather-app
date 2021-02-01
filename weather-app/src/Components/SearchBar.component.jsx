@@ -1,13 +1,29 @@
-import React, { Suspense, DelayedRender}  from 'react';
+import React from 'react';
 import './SearchBar.styles.css'
-import ApexChart from './ApexChart'
+import Chart from "react-apexcharts";
 
 class SearchBar extends React.Component{
     constructor(){
         super();
         this.state = {
             location: "",
-            tempList: [],
+            options: {
+                chart: {
+                  id: "AreaChart"
+                },
+                toolbar:{
+                    show: false,
+                },
+                xaxis: {
+                  categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,38,40]
+                }
+              },
+              series: [
+                {
+                  name: "Temperature",
+                  data: [],
+                }
+              ], 
             weather: {
                 city: {
                     name: ""
@@ -54,8 +70,30 @@ class SearchBar extends React.Component{
                 TempValues.push(this.state.weather.list[i].main.temp);
             }
             console.log(TempValues)
-            this.setState({tempList: TempValues}, this.forceUpdate)
-            console.log(this.state.tempList)
+            this.setState({series:[
+                {
+                    name: "Temperature",
+                    data: TempValues,
+                }
+              ]})
+            let DateTimeValues = [];
+            for (let i=0; i<(this.state.weather.list).length; i++){
+                DateTimeValues.push(this.state.weather.list[i].dt_txt);
+            }
+            console.log("date time values: ", DateTimeValues)
+            this.setState({
+                options: {
+                    chart: {
+                      id: "AreaChart"
+                    },
+                    toolbar:{
+                        show: false,
+                    },
+                    xaxis: {
+                      categories: DateTimeValues
+                    }
+                  }
+            });
         })
         .catch( (error) => {
             // if the server returns any errors
@@ -83,8 +121,18 @@ class SearchBar extends React.Component{
                 </div>
                 <div id='WeatherInfoRight'>
                     <div id='WeatherChart'>
-                        <ApexChart info={this.state.TempValues}/>
-                        
+                    <div>
+                        <div className="row">
+                            <div className="mixed-chart">
+                                <Chart
+                                options={this.state.options}
+                                series={this.state.series}
+                                type="area"
+                                width="900"
+                                />
+                            </div>
+                        </div>
+                    </div>
                     </div>
                     <div id='WeatherForecast'></div>
                 </div>
