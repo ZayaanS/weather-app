@@ -7,6 +7,8 @@ class SearchBar extends React.Component{
         super();
         this.state = {
             location: "",
+            userLatitude: 0,
+            userLongitude: 0,
             options: {
                 chart: {
                   id: "AreaChart"
@@ -51,10 +53,22 @@ class SearchBar extends React.Component{
         this.GetData = this.GetData.bind(this);
     }   
     key = "1a2c3081281d03a31af3cf6e13c04b46";
+    GetLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                this.setState({location: `lat=${position.coords.latitude}&lon=${position.coords.longitude}`})
+                this.GetData();
+              });
+        }
+        else{
+            alert('geolocation is not supported')
+            return "";
+        }
+    }
     GetData = () => {
-        console.log( "https://api.openweathermap.org/data/2.5/forecast?q=" + this.state.location + "&units=metric&appid=" + this.key)
+        console.log( "https://api.openweathermap.org/data/2.5/forecast?" + this.state.location + "&units=metric&appid=" + this.key)
         // get country names from API and append to drop down
-        fetch("https://api.openweathermap.org/data/2.5/forecast?q=" + this.state.location + "&units=metric&appid=" + this.key , {
+        fetch("https://api.openweathermap.org/data/2.5/forecast?" + this.state.location + "&units=metric&appid=" + this.key , {
             "method": "GET",
         })
         .then((response) => {
@@ -94,6 +108,9 @@ class SearchBar extends React.Component{
                     }
                   }
             });
+            document.getElementById("WeatherInfoRight").style.display = "block";
+            document.getElementById("WeatherInfoLeft").style.display = "flex";
+
         })
         .catch( (error) => {
             // if the server returns any errors
@@ -104,38 +121,44 @@ class SearchBar extends React.Component{
         return(
             <div id='Main'>
                 <div id="SearchBar">
-                    <input id='SearchBarInput' type='search' placeholder="City Name" onChange={event =>  this.setState({location: event.target.value})}/>
-                    <button onClick={this.GetData}>search</button>
-                    <button>use current location</button>
+                    <input id='SearchBarInput' type='search' placeholder="City Name" onChange={event =>  this.setState({location: `q=${event.target.value}`})}/>
+                    <button id='SearchButton' onClick={this.GetData}>search</button>
+                    <button id='CurrentLocationButton' onClick={this.GetLocation}>use current location</button>
                 </div>
                 <div id='WeatherDiv'>
-                <div id='WeatherInfoLeft'>
-                    <h1>{this.state.weather.city.name ? this.state.weather.city.name : this.state.location}</h1> 
-                    <h2>{this.state.weather.list[0].main.temp}&deg; C</h2>
-                    <h2>{this.state.weather.list[0].weather[0].description}</h2>
-                    <img src={'http://openweathermap.org/img/wn/'+ this.state.weather.list[0].weather[0].icon +'@2x.png'} alt=""/>
-                    <h4>Humidity</h4>
-                    <h2>{this.state.weather.list[0].main.humidity}%</h2>
-                    <h4>Wind Speed</h4>
-                    <h2>{this.state.weather.list[0].wind.speed} sm/s</h2>
-                </div>
-                <div id='WeatherInfoRight'>
-                    <div id='WeatherChart'>
-                    <div>
-                        <div className="row">
-                            <div className="mixed-chart">
-                                <Chart
-                                options={this.state.options}
-                                series={this.state.series}
-                                type="area"
-                                width="900"
-                                />
+                    <div className='row'>
+                        <div className='col-md-12 col-lg-4'>
+                            <div id='WeatherInfoLeft'>
+                                <h1>{this.state.weather.city.name ? this.state.weather.city.name : this.state.location}</h1> 
+                                <h2>{this.state.weather.list[0].main.temp}&deg; C</h2>
+                                <h2>{this.state.weather.list[0].weather[0].description}</h2>
+                                <img src={'http://openweathermap.org/img/wn/'+ this.state.weather.list[0].weather[0].icon +'@2x.png'} alt=""/>
+                                <h4>Humidity</h4>
+                                <h2>{this.state.weather.list[0].main.humidity}%</h2>
+                                <h4>Wind Speed</h4>
+                                <h2>{this.state.weather.list[0].wind.speed} sm/s</h2>
                             </div>
                         </div>
-                    </div>
-                    </div>
-                    <div id='WeatherForecast'></div>
-                </div>
+                        <div className='col-md-12 col-lg-8'>
+                            <div id='WeatherInfoRight'>
+                                <div id='WeatherChart'>
+                                    <div>
+                                        <div className="row">
+                                            <div className="mixed-chart">
+                                                <Chart
+                                                 options={this.state.options}
+                                                series={this.state.series}
+                                                type="area"
+                                                width="900"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id='WeatherForecast'></div>
+                                 </div>
+                            </div>
+                        </div>
                 </div>
                 
             </div>   
